@@ -31,17 +31,19 @@ void quicksort(int A[],int lb,int len){
 	
 int main(){
 	int len;
-	cout<<"Enter the length of the array to be sorted:";
+	cout<<"Enter the length of the array:";
 	cin>>len;
 	int Arr[len];
-	cout<<"Enter the elements of the array to be sorted:"<<endl;
+	cout<<"Enter the elements:"<<endl;
 	for(int i=0;i<len;i++){
 		cin>>Arr[i];
 	}
 	quicksort(Arr,0,len);
+	cout<<"Quick Sorted Array:";
 	for(int j=0;j<len;j++){
 		cout<<Arr[j]<<" ";
 	}
 	cout<<endl;
 	return 0;
 }
+
