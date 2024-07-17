@@ -2,18 +2,23 @@
 using namespace std;
 
 int binSearch(int A[],int lb,int ub,int key){
-	int mid=(lb+ub)/2;
+	if (lb > ub) {
+        	return -1; 
+        }
+        
+    	int mid=(lb+ub)/2;
 	int index=-1;
-	if (A[mid]>key){
-		binSearch(A,0,mid-1,key);
-	}
-	else if (A[mid]<key){
-		binSearch(A,mid+1,ub,key);
-	}
-	else if(A[mid]==key){
+	if (A[mid]==key){
 		index=mid;
 		cout<<"Element found at "<<index<<endl;
 	}
+	if (A[mid]>key){
+		binSearch(A,0,mid-1,key);
+	}
+	if (A[mid]<key){
+		binSearch(A,mid+1,ub,key);
+	}
+	
 	return index;
 }
 int main(){
@@ -30,9 +35,6 @@ int main(){
 	int result=binSearch(A,0,len,key);
 	if(result==-1){
 		cout<<"Element not found!"<<endl;
-	}
-	else{
-		binSearch(A,0,len-1,key);
 	}
 }
 	
