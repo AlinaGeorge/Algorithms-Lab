@@ -1,0 +1,90 @@
+#include <iostream>
+#include <climits> 
+using namespace std;
+
+#define INF INT_MAX 
+
+void printPath(int predecessor[], int v) {
+    if (v == -1) {
+        return;
+    }
+    printPath(predecessor, predecessor[v]);
+    cout << v << " ";
+}
+
+void dijkstra(int graph[100][100], int V, int src) {
+    int distance[100];    
+    bool visited[100];    
+    int predecessor[100]; 
+
+   
+    for (int i = 0; i < V; i++) {
+        distance[i] = INF;
+        visited[i] = false;
+        predecessor[i] = -1; 
+    }
+
+    distance[src] = 0; 
+    
+    for (int count = 0; count < V - 1; count++) {
+        int minValue = INF, u = -1;
+
+        // Find the unvisited vertex with the smallest distance
+        for (int i = 0; i < V; i++) {
+            if (!visited[i] && distance[i] < minValue) {
+                minValue = distance[i];
+                u = i;
+            }
+        }
+
+        if (u == -1) break; 
+
+        visited[u] = true; 
+
+        for (int v = 0; v < V; v++) {
+            if (graph[u][v] != 0 && !visited[v] && distance[u] != INF &&
+                distance[u] + graph[u][v] < distance[v]) {
+                distance[v] = distance[u] + graph[u][v];
+                predecessor[v] = u; 
+            }
+        }
+    }
+
+    cout << "Vertex\tDistance from Source\tPath\n";
+    for (int i = 0; i < V; i++) {
+        cout << i << "\t\t";
+        if (distance[i] > 99999 or distance[i] < -99999	) {
+            cout << "INF"<<"\t\t\t\t"<<"No path\n";
+        } else {
+            cout << distance[i] << "\t\t\t";
+            cout << src << " ";
+            printPath(predecessor, i);
+            cout << endl;
+        }
+    }
+}
+
+int main() {
+    int V;
+    cout << "Enter the number of vertices: ";
+    cin >> V;
+
+    int graph[100][100];
+    cout << "Enter the adjacency matrix (use 0 for no edge):\n";
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            cin >> graph[i][j];
+            if (graph[i][j] == 0 && i != j) {
+                graph[i][j] = INF; // Treat 0 as no edge for non-diagonal elements
+            }
+        }
+    }
+
+    int src;
+    cout << "Enter the starting vertex: ";
+    cin >> src;
+
+    dijkstra(graph, V, src);
+
+    return 0;
+}
