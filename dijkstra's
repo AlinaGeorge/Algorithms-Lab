@@ -1,5 +1,5 @@
 #include <iostream>
-#include <climits> 
+#include <climits>
 using namespace std;
 
 #define INF INT_MAX 
@@ -17,14 +17,14 @@ void dijkstra(int graph[100][100], int V, int src) {
     bool visited[100];    
     int predecessor[100]; 
 
-   
+    // Initialize all distances and visited status
     for (int i = 0; i < V; i++) {
         distance[i] = INF;
         visited[i] = false;
-        predecessor[i] = -1; 
+        predecessor[i] = -1; // No predecessor initially
     }
 
-    distance[src] = 0; 
+    distance[src] = 0; // Distance to the source is zero
     
     for (int count = 0; count < V - 1; count++) {
         int minValue = INF, u = -1;
@@ -37,27 +37,27 @@ void dijkstra(int graph[100][100], int V, int src) {
             }
         }
 
-        if (u == -1) break; 
+        if (u == -1) break; // No reachable vertex remaining
 
-        visited[u] = true; 
+        visited[u] = true; // Mark the vertex as visited
 
         for (int v = 0; v < V; v++) {
-            if (graph[u][v] != 0 && !visited[v] && distance[u] != INF &&
-                distance[u] + graph[u][v] < distance[v]) {
+            if (graph[u][v] != 0 && graph[u][v] != INF && !visited[v] &&
+                distance[u] != INF && distance[u] + graph[u][v] < distance[v]) {
                 distance[v] = distance[u] + graph[u][v];
-                predecessor[v] = u; 
+                predecessor[v] = u; // Update predecessor
             }
         }
     }
 
+    // Output the results
     cout << "Vertex\tDistance from Source\tPath\n";
     for (int i = 0; i < V; i++) {
         cout << i << "\t\t";
-        if (distance[i] > 99999 or distance[i] < -99999	) {
-            cout << "INF"<<"\t\t\t\t"<<"No path\n";
+        if (distance[i] == INF) {
+            cout << "INF\t\t\tNo path\n";
         } else {
             cout << distance[i] << "\t\t\t";
-            cout << src << " ";
             printPath(predecessor, i);
             cout << endl;
         }
@@ -88,3 +88,4 @@ int main() {
 
     return 0;
 }
+
