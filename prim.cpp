@@ -2,47 +2,56 @@
 #include <climits>
 using namespace std;
 
-#define INF INT_MAX 
+#define INF INT_MAX
 
-void primMST(int graph[100][100], int V, int start) {
-    int key[100];            
-    int parent[100];       
-    bool inMST[100];       
+void printPath(int parent[], int vertex) {
+    if (vertex == -1) {
+        return;
+    }
+    printPath(parent, parent[vertex]);
+    cout << vertex << " ";
+}
+
+void primMST(int graph[100][100], int V, int src) {
+    int parent[100];
+    int key[100];
+    bool mstSet[100];
 
     for (int i = 0; i < V; i++) {
         key[i] = INF;
-        inMST[i] = false;
+        mstSet[i] = false;
         parent[i] = -1;
     }
 
-    key[start] = 0;
-
+    key[src] = 0;
 
     for (int count = 0; count < V - 1; count++) {
-
-        int minKey = INF, u;
-        for (int i = 0; i < V; i++) {
-            if (!inMST[i] && key[i] < minKey) {
-                minKey = key[i];
-                u = i;
+        int u = -1;
+        int minKey = INF;
+        for (int v = 0; v < V; v++) {
+            if (!mstSet[v] && key[v] < minKey) {
+                minKey = key[v];
+                u = v;
             }
         }
 
-        inMST[u] = true; 
+        mstSet[u] = true;
 
         for (int v = 0; v < V; v++) {
-           
-            if (graph[u][v] != 0 && !inMST[v] && graph[u][v] < key[v]) {
+            if (graph[u][v] != 0 && !mstSet[v] && graph[u][v] < key[v]) {
                 key[v] = graph[u][v];
                 parent[v] = u;
             }
         }
     }
 
-    cout << "Edge \tWeight\n";
-    for (int i = 1; i < V; i++) {
-        if (parent[i] != -1) {
-            cout << parent[i] << " - " << i << "\t" << graph[i][parent[i]] << endl;
+    cout << "Edge \tWeight \tPath from Source\n";
+    for (int i = 0; i < V; i++) {
+        if (i != src) {
+            cout << parent[i] << " - " << i << "\t" << graph[i][parent[i]] << "\t";
+            cout << src << " ";
+            printPath(parent, i);
+            cout << endl;
         }
     }
 }
@@ -57,14 +66,17 @@ int main() {
     for (int i = 0; i < V; i++) {
         for (int j = 0; j < V; j++) {
             cin >> graph[i][j];
+            if (graph[i][j] == 0 && i != j) {
+                graph[i][j] = INF;
+            }
         }
     }
-    
-    int start;
-    cout << "Enter the starting vertex: ";
-    cin >> start;
 
-    primMST(graph, V, start);
+    int src;
+    cout << "Enter the starting vertex: ";
+    cin >> src;
+
+    primMST(graph, V, src);
 
     return 0;
 }
